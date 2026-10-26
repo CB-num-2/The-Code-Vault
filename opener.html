@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Opener</title>
+</head>
+<body>
+    <div id="opener-display"></div>
+    <button id="load-btn">load</button>
+    <script>
+        document.getElementById('load-btn').addEventListener('click', function() {
+            const cachedCode = localStorage.getItem('minimal_cache_token');
+            document.getElementById('opener-display').textContent = cachedCode || 'Empty';
+        });
+    </script>
+</body>
+</html>
