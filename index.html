@@ -1,0 +1,94 @@
+<h3>Project Downloader</h3>
+<p>Click the button below to download both separate files (vault.html and opener.html) directly to your computer:</p>
+<button id="download-btn">download</button>
+
+<hr>
+
+<h3>Live Sandbox Previews</h3>
+
+<!-- APP 1: VAULT SAMPLE -->
+<h4>App 1 Sandbox (vault.html)</h4>
+<div id="vault-code"></div>
+
+<hr>
+
+<!-- APP 2: OPENER SAMPLE -->
+<h4>App 2 Sandbox (opener.html)</h4>
+<div id="opener-display"></div>
+<button id="load-btn">load</button>
+
+<script>
+    // Live sandbox execution for testing right inside the preview environment
+    (function() {
+        const pool = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let code = '';
+        for (let i = 0; i < 6; i++) {
+            code += pool.charAt(Math.floor(Math.random() * pool.length));
+        }
+        localStorage.setItem('minimal_cache_token', code);
+        document.getElementById('vault-code').textContent = code;
+    })();
+
+    document.getElementById('load-btn').addEventListener('click', function() {
+        const cachedCode = localStorage.getItem('minimal_cache_token');
+        document.getElementById('opener-display').textContent = cachedCode || 'Empty';
+    });
+
+    // Content definitions for the clean, independent production files
+    const file1Content = `<!DOCTYPE html>
+<html>
+<head>
+    <title>Vault</title>
+</head>
+<body>
+    <div id="vault-code"></div>
+    <script>
+        const pool = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let code = '';
+        for (let i = 0; i < 6; i++) {
+            code += pool.charAt(Math.floor(Math.random() * pool.length));
+        }
+        localStorage.setItem('minimal_cache_token', code);
+        document.getElementById('vault-code').textContent = code;
+    <\/script>
+</body>
+</html>`;
+
+    const file2Content = `<!DOCTYPE html>
+<html>
+<head>
+    <title>Opener</title>
+</head>
+<body>
+    <div id="opener-display"></div>
+    <button id="load-btn">load</button>
+    <script>
+        document.getElementById('load-btn').addEventListener('click', function() {
+            const cachedCode = localStorage.getItem('minimal_cache_token');
+            document.getElementById('opener-display').textContent = cachedCode || 'Empty';
+        });
+    <\/script>
+</body>
+</html>`;
+
+    // Download trigger compiling clean blobs for separate distribution files
+    document.getElementById('download-btn').addEventListener('click', function() {
+        function triggerDownload(filename, textContent) {
+            const blob = new Blob([textContent], { type: 'text/html' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Save file 1
+        triggerDownload('vault.html', file1Content);
+
+        // Save file 2 after a brief delay so the browser initiates both downloads successfully
+        setTimeout(function() {
+            triggerDownload('opener.html', file2Content);
+        }, 400);
+    });
+</script>
